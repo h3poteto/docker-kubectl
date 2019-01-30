@@ -18,7 +18,15 @@ RUN echo 'kube:password' | chpasswd
 
 ENV GOPATH /go
 
+ADD config.yml.tpl /var/opt/
+ADD entrypoint.sh /var/opt/
+RUN chown kube:kube /var/opt/config.yml.tpl && \
+    chown kube:kube /var/opt/entrypoint.sh
+
 USER kube
 
 RUN set -ex && \
     go get -u -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator
+
+WORKDIR /var/opt
+
