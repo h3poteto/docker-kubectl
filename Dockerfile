@@ -11,22 +11,23 @@ RUN set -ex && \
     echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
     apt-get update && \
     apt-get install -y kubectl && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir /var/opt/kube
 
 RUN useradd -m -s /bin/bash kube
 RUN echo 'kube:password' | chpasswd
 
 ENV GOPATH /go
 
-ADD config.yml.tpl /var/opt/
-ADD entrypoint.sh /var/opt/
-RUN chown kube:kube /var/opt/config.yml.tpl && \
-    chown kube:kube /var/opt/entrypoint.sh
+ADD config.yml.tpl /var/opt/kube/
+ADD entrypoint.sh /var/opt/kube/
+RUN chown -R kube:kube /var/opt/kube
 
 USER kube
 
 RUN set -ex && \
     go get -u -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator
 
-WORKDIR /var/opt
+WORKDIR /var/opt/kube
 
+ENTRYPOINT ["/var/opt/kube/entrypoint.sh"]
