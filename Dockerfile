@@ -25,7 +25,9 @@ RUN chown -R kube:kube /var/opt/kube
 
 USER kube
 
+
 RUN set -ex && \
+    mkdir -p $HOME/.kube && \
     go get -u -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator
 
 WORKDIR /var/opt/kube

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cat /var/opt/config.yml/tpl | envsubst > ~/.kube/config
+cat /var/opt/kube/config.yml.tpl | envsubst > ~/.kube/config
 
 exec "$@"
