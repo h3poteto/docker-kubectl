@@ -1,4 +1,4 @@
-FROM golang:1.11.5-stretch
+FROM golang:1.14.1-buster
 
 RUN set -ex && \
     apt-get update && \
@@ -11,7 +11,7 @@ RUN set -ex && \
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
     echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
     apt-get update && \
-    apt-get install -y kubectl && \
+    apt-get install -y kubectl awscli && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir /var/opt/kube
 
@@ -26,10 +26,6 @@ RUN chown -R kube:kube /var/opt/kube
 
 USER kube
 
-
-RUN set -ex && \
-    mkdir -p $HOME/.kube && \
-    go get -u -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator
 
 WORKDIR /var/opt/kube
 
