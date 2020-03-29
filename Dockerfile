@@ -26,6 +26,7 @@ RUN chown -R kube:kube /var/opt/kube
 
 USER kube
 
+RUN mkdir ~/.kube
 
 WORKDIR /var/opt/kube
 
